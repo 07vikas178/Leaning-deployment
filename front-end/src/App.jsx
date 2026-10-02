@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 // Change this one URL when the API is deployed to Azure.
-const API_URL = 'http://localhost:5000/api/todos'
+const API_URL = 'https://v7-todo-app-hthfhb9hpaxe8hm.centralus-01.azurewebsites.net/api/Todos'
 
 function App() {
   const [todos, setTodos] = useState([])
