@@ -7,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("DefaultConnection is missing from configuration.");
 // AddDbContext makes this database context available to controllers through ASP.NET Core's built-in dependency injection.
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+// EnableRetryOnFailure retries short-lived errors, such as Azure SQL serverless waking up from auto-pause.
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString, sqlOptions =>
+    sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null)));
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
 {
